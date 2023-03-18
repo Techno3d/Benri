@@ -30,7 +30,7 @@ createTask.font().setPointSize(20)
 
 def newTask():
     task = Task(taskEntry.text())
-    # taskList.append(task)
+    taskList.append(task)
     taskEntry.setText("")
 
 createTask.clicked.connect(lambda: newTask())
@@ -72,13 +72,14 @@ class Task():
 
 
 mainWindow.setWindowTitle("Main Window")
-mainWindow.setWindowOpacity(0.75)
+mainWindow.setWindowOpacity(0.8)
 mainWindow.setGeometry(100, 100, 500, 500)
 # mainWindow.setStyleSheet("background-color: #000000; color: #ffffff;")
 mainWindow.addDockWidget(Qt.LeftDockWidgetArea, widget)
 # mainWindow.addDockWidget(Qt.RightDockWidgetArea, taskListWidget)
-mainWindow.show()
 
+mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
+mainWindow.show()
 if __name__ == "__main__":
     sys.exit(app.exec_())
 
