@@ -66,7 +66,7 @@ createTask.clicked.connect(lambda: newTask())
 class Task():
     numTasks = 0
 
-    def __init__(self, name):
+    def __init__(self, name,):
         
         self.name = name
         self.status = False
