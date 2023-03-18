@@ -34,40 +34,69 @@ createTask.font().setPointSize(20)
 # createTask.setStyleSheet("background-color: #000000; color: #ffffff;")
 
 
+
 def newTask():
     task = Task(taskEntry.text())
     taskList.append(task)
     taskEntry.setText("")
-    print(task)
 
 createTask.clicked.connect(lambda: newTask())
     
 
 
 class Task():
-    id = 0
+    numTasks = 0
 
     def __init__(self, name):
+        
         self.name = name
         self.status = False
-        print(self.name)
+        
         self.tasklabel = QLabel(widget)
         self.tasklabel.setText(self.name)
         self.tasklabel.setFont(QFont('Arial', 20))
-        
-        self.tasklabel.move(100, 200 + (Task.id * 40))
-        self.tasklabel.resize(200, 40)
+        self.id = Task.numTasks
+        Task.numTasks += 1
+        print(self.id)
+        self.tasklabel.move(100, 140 + (self.id * 40))
+        self.tasklabel.resize(400, 40)
         self.tasklabel.show()
         self.checkBox = QCheckBox(widget)
-        self.checkBox.move(460, 200 + (Task.id * 40))
+        self.checkBox.move(380, 140 + (self.id * 40))
         self.checkBox.resize(40, 40)
         self.checkBox.show()
+        self.deleteButton = QPushButton("Delete", widget)
+        self.deleteButton.move(400, 140 + (self.id * 40))
+        self.deleteButton.resize(100, 40)
+        self.deleteButton.show()
+        self.deleteButton.clicked.connect(lambda: Task.delete(self))
+        
+
+    def delete(self):
+        
+        self.tasklabel.deleteLater()
+        self.checkBox.deleteLater()
+        self.deleteButton.deleteLater()
+        self.tasklabel.hide()
+        self.checkBox.hide()
+        self.deleteButton.hide()
+        Task.numTasks -= 1
+        taskList.remove(self)
+        for i in range(Task.numTasks):
+            taskList[i].id = i
+            taskList[i].tasklabel.move(100, 140 + (taskList[i].id * 40))
+            taskList[i].checkBox.move(380, 140 + (taskList[i].id * 40))
+            taskList[i].deleteButton.move(400, 140 + (taskList[i].id * 40))
+        
+
+
+
         
 
         def setStatus(self, status):
             self.status = status
 
-        Task.id += 1
+        
         self.checkBox.stateChanged.connect(lambda: setStatus(self, self.checkBox.isChecked()))
         def getStatus(self):
             return self.status
@@ -97,20 +126,23 @@ class Task():
 
 
 mainWindow.setWindowTitle("Benri")
-mainWindow.setWindowOpacity(0.8)
+mainWindow.setWindowOpacity(0.5)
 mainWindow.setGeometry(100, 100, 500, 1080)
 # mainWindow.setStyleSheet("background-color: #000000; color: #ffffff;")
 mainWindow.addDockWidget(Qt.LeftDockWidgetArea, widget)
 # mainWindow.addDockWidget(Qt.RightDockWidgetArea, taskListWidget)
 
-mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
-mainWindow.setWindowFlags(Qt.FramelessWindowHint)
+
 # mainWindow.setWindowFlags(Qt.WindowCloseButtonHint)
 mainWindow.move(QDesktopWidget().availableGeometry().topLeft() - mainWindow.frameGeometry().topLeft())
+mainWindow.setWindowFlags(Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint))
+
 
 # mainWindow.move()
-mainWindow.show()
 
+mainWindow.setWindowIcon(QIcon('LOGO.png'))
+mainWindow.show()
+app.setWindowIcon(QIcon('LOGO.png'))
 
 
 if __name__ == "__main__":
