@@ -22,30 +22,31 @@ widget = QDockWidget()
 # addBreak.resize(200, 40)
 # addBreak.font().setPointSize(20)
 
-
-taskEntry = QLineEdit(widget)
-taskEntry.move(100, 100)
-taskEntry.resize(200, 40)
-taskEntry.setPlaceholderText("Enter Task")
-taskEntry.font().setPointSize(30)
-taskEntry.font().setBold(True)
-taskEntry.setAlignment(Qt.AlignCenter)
-# taskEntry.setStyleSheet("background-color: #000000; color: #ffffff;")
-
 createTask = QPushButton("Create Task", widget)
-createTask.move(300, 100)
 createTask.resize(200, 40)
 createTask.font().setPointSize(20)
 # createTask.setStyleSheet("background-color: #000000; color: #ffffff;")
 
-breakEntry = QLineEdit(widget)
-breakEntry.move(100, 980)
-breakEntry.resize(200, 40)
+taskEntry = QLineEdit(widget)
+taskEntry.resize(500-createTask.width(), 40)
+taskEntry.setPlaceholderText("Enter Task")
+taskEntry.font().setPointSize(30)
+taskEntry.move(0, 0)
+taskEntry.font().setBold(True)
+taskEntry.setAlignment(Qt.AlignCenter)
+# taskEntry.setStyleSheet("background-color: #000000; color: #ffffff;")
+
+createTask.move(taskEntry.width(), 0)
 
 createBreak = QPushButton("Create Break", widget)
-createBreak.move(300, 980)
 createBreak.resize(200, 40)
 createBreak.clicked.connect(lambda: createBreak())
+
+breakEntry = QLineEdit(widget)
+breakEntry.move(0, 980)
+breakEntry.resize(500-createBreak.width(), 40)
+
+createBreak.move(breakEntry.width(), 980)
 
 def createBreak():
     newBreak = Break(breakEntry.text())
@@ -167,7 +168,8 @@ class Break(Task):
             mainWindow.setWindowTitle("Break for: " + str(self.time))
         self.delete()
         mainWindow.setWindowTitle("Benri")
-        mainWindow.setGeometry(100, 100, 500, 1080)
+        mainWindow.setGeometry(0, 0, 500, 1080)
+        time.sleep(0.01)
         mainWindow.move(QDesktopWidget().availableGeometry().topLeft() - mainWindow.frameGeometry().topLeft())
         # mainWindow.setWindowFlags(Qt.WindowFlags(Qt.FramelessWindowHint))
             
