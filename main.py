@@ -30,7 +30,7 @@ createTask.font().setPointSize(20)
 
 def newTask():
     task = Task(taskEntry.text())
-    taskList.append(task)
+    # taskList.append(task)
     taskEntry.setText("")
 
 createTask.clicked.connect(lambda: newTask())
