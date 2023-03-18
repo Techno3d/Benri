@@ -33,6 +33,42 @@ fn setup() -> Vec<Data> {
     return vec![Data::default()];
 }
 
+#[pyfunction]
+fn get_tasks() -> Vec<Data> {
+    if let Some(base_dirs) = BaseDirs::new() {
+        let data_dir = base_dirs.data_dir();
+        let data = data_dir.to_str().unwrap().to_owned() + "/benri/Tasks.json";
+        let main_file = Path::new(&data);
+        return serde_json::from_str::<Vec<Data>>(&fs::read_to_string(main_file).unwrap()).unwrap();
+    }
+    return vec![Data::default()];
+}
+
+#[pyfunction]
+fn add_task(name: String, completed: bool, link: Option<String>) {
+    if let Some(base_dirs) = BaseDirs::new() {
+        let data_dir = base_dirs.data_dir();
+        let data = data_dir.to_str().unwrap().to_owned() + "/benri/Tasks.json";
+        let main_file = Path::new(&data);
+        let mut tasks = get_tasks();
+        tasks.push(Data {name, completed, link});
+
+        fs::write(main_file, serde_json::to_vec(&tasks).unwrap()).unwrap();
+    }
+}
+
+#[pyfunction]
+fn set_tasks(tasks: Vec<(String, bool, Option<String>)>) {
+    let tasks: Vec<Data> = tasks.iter().map(|x| Data {name: x.0.clone(), completed: x.1, link: x.2.clone()}).collect();
+    if let Some(base_dirs) = BaseDirs::new() {
+        let data_dir = base_dirs.data_dir();
+        let data = data_dir.to_str().unwrap().to_owned() + "/benri/Tasks.json";
+        let main_file = Path::new(&data);
+
+        fs::write(main_file, serde_json::to_vec(&tasks).unwrap()).unwrap();
+    }
+}
+
 #[derive(Default, Deserialize, Serialize, Debug)]
 #[pyclass]
 struct Data {
