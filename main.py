@@ -16,15 +16,24 @@ taskEntry = QLineEdit(widget)
 taskEntry.move(100, 100)
 taskEntry.resize(200, 40)
 taskEntry.setPlaceholderText("Enter Task")
-taskEntry.font().setPointSize(20)
+taskEntry.font().setPointSize(30)
+taskEntry.font().setBold(True)
+taskEntry.setAlignment(Qt.AlignCenter)
 # taskEntry.setStyleSheet("background-color: #000000; color: #ffffff;")
 
 createTask = QPushButton("Create Task", widget)
 createTask.move(300, 100)
 createTask.resize(200, 40)
+createTask.font().setPointSize(20)
+# createTask.setStyleSheet("background-color: #000000; color: #ffffff;")
 
 
-createTask.clicked.connect(lambda: Task(taskEntry.text()))
+def newTask():
+    task = Task(taskEntry.text())
+    taskList.append(task)
+    taskEntry.setText("")
+
+createTask.clicked.connect(lambda: newTask())
     
 
 
@@ -37,6 +46,13 @@ class Task():
         print(self.name)
         self.tasklabel = QLabel(self.name, widget)
         self.checkBox = QCheckBox(widget)
+        self.tasklabel.move(100, 200 + (Task.id * 40))
+        self.tasklabel.resize(200, 40)
+        self.checkBox.move(300, 200 + (Task.id * 40))
+        self.checkBox.resize(200, 40)
+        self.checkBox.stateChanged.connect(lambda: self.setStatus(self.checkBox.isChecked()))
+
+
         Task.id += 1
         
     # def createCheck(self):
