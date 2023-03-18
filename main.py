@@ -3,6 +3,11 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QLineEdit, QPushButton, Q
 from PyQt5.QtGui import * 
 from PyQt5.QtCore import * 
 import sys
+from benri_api import *
+
+task = setup()
+print(task[0].name)
+
 taskList = []
 
 app = QApplication(sys.argv)
@@ -54,7 +59,7 @@ class Task():
 
 
         Task.id += 1
-        
+           
     # def createCheck(self):
     #     check = QCheckBox(self.name, widget)
     #     check.move(100, 200 + (Task.id * 40))
