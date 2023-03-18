@@ -3,7 +3,15 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QLineEdit, QPushButton, Q
 from PyQt5.QtGui import * 
 from PyQt5.QtCore import * 
 import sys
+<<<<<<< HEAD
+from benri_api import *
+
+task = setup()
+print(task[0].name)
+
+=======
 currentTask = None
+>>>>>>> 9d39f32b840bb3b05aca8893cb6f73d2038b5cfb
 taskList = []
 
 app = QApplication(sys.argv)
@@ -104,6 +112,7 @@ class Task():
             return self.name
         
     
+>>>>>>> 9d39f32b840bb3b05aca8893cb6f73d2038b5cfb
 
     
 
