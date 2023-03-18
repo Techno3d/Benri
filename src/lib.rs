@@ -94,6 +94,9 @@ impl Data {
 #[pymodule]
 fn benri_api(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(setup, m)?)?;
+    m.add_function(wrap_pyfunction!(get_tasks, m)?)?;
+    m.add_function(wrap_pyfunction!(add_task, m)?)?;
+    m.add_function(wrap_pyfunction!(set_tasks, m)?)?;
     m.add_class::<Data>()?;
     Ok(())
 }
