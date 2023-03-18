@@ -147,13 +147,16 @@ class Break(Task):
         super().__init__("break for: " + time)
         self.checkBox.stateChanged.connect(lambda: self.start())
 
+    
         
     def start(self):
         mainWindow.setWindowTitle("Break for: " + str(self.time))
-        mainWindow.setGeometry(0,0,25,25)
+        mainWindow.setGeometry(100,100,500,25)
+        mainWindow.move(QDesktopWidget().availableGeometry().topLeft() - mainWindow.frameGeometry().topLeft())
         while (self.checkBox.isChecked()):
             self.time -= 1
             time.sleep(1)
+            QtCore.QCoreApplication.processEvents()
             if (self.time == 0):
                 self.checkBox.setChecked(False)
                 self.time = self.maxTime
@@ -161,12 +164,12 @@ class Break(Task):
             if (self.checkBox.isChecked() == False):
                 self.time = self.maxTime
                 break
-            # setName("break for: " + str(self.time))
+            mainWindow.setWindowTitle("Break for: " + str(self.time))
         self.delete()
         mainWindow.setWindowTitle("Benri")
         mainWindow.setGeometry(100, 100, 500, 1080)
         mainWindow.move(QDesktopWidget().availableGeometry().topLeft() - mainWindow.frameGeometry().topLeft())
-        # mainWindow.setWindowFlags(Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint))
+        # mainWindow.setWindowFlags(Qt.WindowFlags(Qt.FramelessWindowHint))
             
         
 
