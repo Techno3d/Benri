@@ -38,6 +38,7 @@ def newTask():
     task = Task(taskEntry.text())
     taskList.append(task)
     taskEntry.setText("")
+    print(task)
 
 createTask.clicked.connect(lambda: newTask())
     
@@ -70,6 +71,8 @@ class Task():
         self.checkBox.stateChanged.connect(lambda: setStatus(self, self.checkBox.isChecked()))
         def getStatus(self):
             return self.status
+        def getName(self):
+            return self.name
         
     
 
