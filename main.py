@@ -4,10 +4,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 import sys
 import time
-# from benri_api import *
+from benri_api import *
+import benri_api
 
-# task = setup()
-# print(task[0].name)
+tasks = benri_api.setup()
+print(tasks[0].completed)
 
 taskList = []
 
@@ -56,35 +57,50 @@ def createBreak():
 
 
 def newTask():
-    task = Task(taskEntry.text())
+    task = Task(taskEntry.text(), False)
     taskList.append(task)
+    benri_api.add_task(task.name, task.status)
     taskEntry.setText("")
 
 createTask.clicked.connect(lambda: newTask())
-    
 
+def setAllTasks():
+    newTaskLists = []
+    for t in taskList:
+        newTaskLists.append((t.name, t.status))
+        print(t.status)
+
+    benri_api.set_tasks(newTaskLists)
+
+def funnyLambda(self):
+    self.status = self.checkBox.isChecked()
+    setAllTasks()
+    
 
 class Task():
     numTasks = 0
 
-    def __init__(self, name,):
+    def __init__(self, name, status):
         
         self.name = name
-        self.status = False
+        self.status = status
         
         self.tasklabel = QLabel(widget)
         self.tasklabel.setText(self.name)
         self.tasklabel.setFont(QFont('Arial', 20))
         self.id = Task.numTasks
         Task.numTasks += 1
-        print(self.name)
-        print(self.id)
+        # print(self.name)
+        # print(self.id)
         self.tasklabel.move(100, 140 + (self.id * 40))
         self.tasklabel.resize(400, 40)
         self.tasklabel.show()
         self.checkBox = QCheckBox(widget)
         self.checkBox.move(380, 140 + (self.id * 40))
         self.checkBox.resize(40, 40)
+        print(status)
+        self.checkBox.setChecked(status)
+        self.checkBox.stateChanged.connect(lambda: funnyLambda(self))
         self.checkBox.show()
         self.deleteButton = QPushButton("Delete", widget)
         self.deleteButton.move(400, 140 + (self.id * 40))
@@ -108,10 +124,7 @@ class Task():
             taskList[i].tasklabel.move(100, 140 + (taskList[i].id * 40))
             taskList[i].checkBox.move(380, 140 + (taskList[i].id * 40))
             taskList[i].deleteButton.move(400, 140 + (taskList[i].id * 40))
-        
-
-
-
+            setAllTasks()
         
 
         def setStatus(self, status):
@@ -133,6 +146,8 @@ class Task():
     
 # >>>>>>> 9d39f32b840bb3b05aca8893cb6f73d2038b5cfb
 
+for task in tasks:
+    taskList.append(Task(task.name, task.completed))
     
 
 class Break(Task):
@@ -142,7 +157,7 @@ class Break(Task):
         time = 10
     time = 300
     def __init__(self, time):
-        print("test1")
+        # print("test1")
         self.maxTime = int(time)
         self.time = int(time)
         super().__init__("break for: " + time)

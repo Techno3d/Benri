@@ -45,21 +45,21 @@ fn get_tasks() -> Vec<Data> {
 }
 
 #[pyfunction]
-fn add_task(name: String, completed: bool, link: Option<String>) {
+fn add_task(name: String, completed: bool) {
     if let Some(base_dirs) = BaseDirs::new() {
         let data_dir = base_dirs.data_dir();
         let data = data_dir.to_str().unwrap().to_owned() + "/benri/Tasks.json";
         let main_file = Path::new(&data);
         let mut tasks = get_tasks();
-        tasks.push(Data {name, completed, link});
+        tasks.push(Data {name, completed});
 
         fs::write(main_file, serde_json::to_vec(&tasks).unwrap()).unwrap();
     }
 }
 
 #[pyfunction]
-fn set_tasks(tasks: Vec<(String, bool, Option<String>)>) {
-    let tasks: Vec<Data> = tasks.iter().map(|x| Data {name: x.0.clone(), completed: x.1, link: x.2.clone()}).collect();
+fn set_tasks(tasks: Vec<(String, bool)>) {
+    let tasks: Vec<Data> = tasks.iter().map(|x| Data {name: x.0.clone(), completed: x.1}).collect();
     if let Some(base_dirs) = BaseDirs::new() {
         let data_dir = base_dirs.data_dir();
         let data = data_dir.to_str().unwrap().to_owned() + "/benri/Tasks.json";
@@ -76,18 +76,16 @@ struct Data {
     name: String,
     #[pyo3(get, set)]
     completed: bool,
-    #[pyo3(get, set)]
-    link: Option<String>,
 }
 
 #[pymethods]
 impl Data {
     #[new]
-    fn new(name: String, completed: bool, link: Option<String>) -> PyResult<Self> {
-        Ok(Data {name, completed, link })
+    fn new(name: String, completed: bool) -> PyResult<Self> {
+        Ok(Data {name, completed })
     }
-    fn destructure(&self) -> (String, bool, Option<String>) {
-        (self.name.clone(), self.completed, self.link.clone())
+    fn destructure(&self) -> (String, bool) {
+        (self.name.clone(), self.completed)
     }
 }
 
